@@ -8,6 +8,7 @@
 
 #include "output.h"
 #include "fftmanip.h"
+#include "typedefs.h"
 
 /* This function implements something similar to MATLAB's 'fftshift':
  * it takes the FFT'd vector invec and puts a shifted copy in outvec.*/
@@ -24,7 +25,7 @@ void writeFT(const char * fileName, double * invec, double * times, int n);
 /* This function writes the FT of the input file to a file.
  * It assumes evenly spaced time data (with at least two points).
  */
-void writeFTOfFile(const char * fileName);
+void writeFTOfFile(const char * fileName, Parameters p);
 
 /* reads in the values from file; returns an array the length of the number of 
  * numbers in the file

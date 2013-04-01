@@ -1,8 +1,10 @@
 #include <cmath>
+#include <string>
 #include <fftw3.h>
 #include <unistd.h>
 #include <iostream>
 
+#include "typedefs.h"
 #include "output.h"
 
 #define N 10001
@@ -11,6 +13,15 @@ int main (int argc, char ** argv) {
  opterr = 0;
  int c;
 
+ /* structure with default parameters */
+ Parameters p;
+ p.twoSided = false;
+ p.backwardFT = false;
+ p.forwardFT = true;
+ p.verbose = false;
+ p.outputExt = "FT";
+ p.printHelp = false;
+
  bool verbose = false;
 
  /* process command line options */
@@ -18,22 +29,29 @@ int main (int argc, char ** argv) {
   switch (c) {
    case '2':
     std::cout << "Output is two-sided FT.\n";
+    p.twoSided = true;
     break;
    case 'b':
     std::cout << "Perform backward FT.\n";
+    p.backwardFT = true;
+    p.forwardFT = false;
     break;
    case 'f':
     std::cout << "Perform forward FT.\n";
+    p.forwardFT = true;
+    p.backwardFT = false;
     break;
    case 'h':
     std::cout << "Print help.\n";
+    p.printHelp = true;
     break;
    case 'v':
     std::cout << "Print verbose information.\n";
-    verbose = true;
+    p.verbose = true;
     break;
    case 'o':
-    std::cout << "Specify output filename.\n";
+    std::cout << "Specify output filename pre-extension.  Default is 'FT'.\n";
+    p.outputExt = optarg;
     break;
    case '?':
     if (optopt == 'o') {
@@ -67,7 +85,7 @@ int main (int argc, char ** argv) {
   std::cout << "The input file name is " << inputFile << ".\n";
  }
 
- writeFTOfFile(inputFile);
+ writeFTOfFile(inputFile, p);
 
  return 0;
 }

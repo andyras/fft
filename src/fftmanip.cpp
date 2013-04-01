@@ -130,7 +130,7 @@ void readFTInput(double * times, fftw_complex * in, const char * nameOfFile, int
 /* This function writes the FT of the input file to a file.
  * It assumes evenly spaced time data (with at least two points).
  */
-void writeFTOfFile(const char * inputFile) {
+void writeFTOfFile(const char * inputFile, Parameters p) {
  /* create string for output file name */
  std::string outputFile = inputFile;
  /* find position of last period and insert "FT"*/
