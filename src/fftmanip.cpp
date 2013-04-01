@@ -133,15 +133,17 @@ void readFTInput(double * times, fftw_complex * in, const char * nameOfFile, int
 void writeFTOfFile(const char * inputFile, Parameters p) {
  /* create string for output file name */
  std::string outputFile = inputFile;
- /* find position of last period and insert "FT"*/
+ /* find position of last period and insert extension*/
  size_t pos = outputFile.rfind(".");
  if (pos == std::string::npos) {
-  outputFile.append("FT");
+  outputFile.append(p.outputExt.c_str());
  }
  else {
-  outputFile.insert(pos, "FT");
+  outputFile.insert(pos, p.outputExt.c_str());
  }
- std::cout << "output file name is " << outputFile << ".\n";
+ if (p.verbose) {
+  std::cout << "output file name is " << outputFile << ".\n";
+ }
  
  int n = Number_of_values(inputFile);
 

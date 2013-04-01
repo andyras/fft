@@ -28,30 +28,42 @@ int main (int argc, char ** argv) {
  while ((c = getopt(argc, argv, "2bfho:v")) != -1) {
   switch (c) {
    case '2':
-    std::cout << "Output is two-sided FT.\n";
+    if (p.verbose) {
+     std::cout << "Output is two-sided FT.\n";
+    }
     p.twoSided = true;
     break;
    case 'b':
-    std::cout << "Perform backward FT.\n";
+    if (p.verbose) {
+     std::cout << "Perform backward FT.\n";
+    }
     p.backwardFT = true;
     p.forwardFT = false;
     break;
    case 'f':
-    std::cout << "Perform forward FT.\n";
+    if (p.verbose) {
+     std::cout << "Perform forward FT.\n";
+    }
     p.forwardFT = true;
     p.backwardFT = false;
     break;
    case 'h':
-    std::cout << "Print help.\n";
+    if (p.verbose) {
+     std::cout << "Print help.\n";
+    }
     p.printHelp = true;
     break;
    case 'v':
-    std::cout << "Print verbose information.\n";
+    if (p.verbose) {
+     std::cout << "Print verbose information.\n";
+    }
     p.verbose = true;
     break;
    case 'o':
-    std::cout << "Specify output filename pre-extension.  Default is 'FT'.\n";
     p.outputExt = optarg;
+    if (p.verbose) {
+     std::cout << "Specifying output filename pre-extension: " << p.outputExt << ".\n";
+    }
     break;
    case '?':
     if (optopt == 'o') {
