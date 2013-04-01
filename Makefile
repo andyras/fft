@@ -4,8 +4,9 @@
 # $^ is its dependencies
 
 CPP = icpc
-CPPFLAGS = -O3
+CPPFLAGS = -O3 -mkl
 LIBS = -lfftw3
+LIBS = 
 
 # source directory
 SRCDIR = src
@@ -18,6 +19,7 @@ BIN = fft
 OBJ = $(OBJDIR)/fft.o $(OBJDIR)/output.o $(OBJDIR)/fftmanip.o
 ### directories with headers
 INCDIR = -I./include
+INCDIR = -I./include -I$(MKLROOT)/include/fftw
 
 # main executable: this is made by default so should go on top
 $(BIN): $(OBJ)
