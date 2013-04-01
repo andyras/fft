@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <fftw3.h>
+#include <fstream>
 
 #include "output.h"
 #include "fftmanip.h"
@@ -20,7 +21,7 @@ void fftshift_double(double * invec, double * outvec, int n);
 /* This function writes the FT of the input time-sampled vector to a file.
  * It assumes evenly spaced time data (with at least two points).
  */
-void writeFT(const char * fileName, double * invec, double * times, int n);
+void writeFT(const char * fileName, double * invec, double * times, int n, Parameters p);
 
 /* This function writes the FT of the input file to a file.
  * It assumes evenly spaced time data (with at least two points).
@@ -36,5 +37,8 @@ void readFTInput(double * times, fftw_complex * in, const char * nameOfFile, int
  * they are one per line or multiple per line.
  */
 int Number_of_values (const char * nameOfFile);
+
+/* Counts the number of lines in a file. */
+int countLines(const char * fileName);
 
 #endif

@@ -39,7 +39,7 @@ void fftshift_double(double * invec, double * outvec, int n) {
 /* This function writes the FT of the input time-sampled vector to a file.
  * It assumes evenly spaced time data (with at least two points).
  */
-void writeFT(const char * fileName, double * invec, double * times, int n) {
+void writeFT(const char * fileName, double * invec, double * times, int n, Parameters p) {
  // compute time spacing
  double dt = times[1] - times[0];
  // compute energy spacing
@@ -70,7 +70,7 @@ void writeFT(const char * fileName, double * invec, double * times, int n) {
  fftw_execute(fftw_fwd);
 
  // print the result
- outputCVectorShift(fileName, out, energies, n);
+ outputCVectorShift(fileName, out, energies, n, p);
 
  // clean up
  delete [] energies;
@@ -101,6 +101,20 @@ int Number_of_values (const char * nameOfFile) {
  fclose(inputFile);
 
  return numberOfValues;
+}
+
+/* Counts the number of lines in a file. */
+int countLines(const char * fileName) {
+ int n = 0;
+ std::string line;
+ std::ifstream in(fileName);
+ while (std::getline(in, line)) {
+  n++;
+ }
+ if (n == 0 ) {
+  std::cerr << "WARNING [" << __FUNCTION__ << "]: input file " << fileName << " is empty.\n";
+ }
+ return n;
 }
 
 /* reads in the values from file; returns an array the length of the number of 
@@ -145,7 +159,7 @@ void writeFTOfFile(const char * inputFile, Parameters p) {
   std::cout << "output file name is " << outputFile << ".\n";
  }
  
- int n = Number_of_values(inputFile);
+ int n = countLines(inputFile);
 
  double * times = new double [n];
 
@@ -176,7 +190,7 @@ void writeFTOfFile(const char * inputFile, Parameters p) {
  fftw_execute(fftw_fwd);
 
  // print the result
- outputCVectorShift(outputFile.c_str(), out, energies, n);
+ outputCVectorShift(outputFile.c_str(), out, energies, n, p);
 
  // clean up
  delete [] energies;

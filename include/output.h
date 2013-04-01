@@ -2,7 +2,9 @@
 #define __OUTPUT_H__
 
 #include <fftw3.h>
+#include <iostream>
 
+#include "typedefs.h"
 #include "fftmanip.h"
 
 /* prints out array of fftw_complex values.  The 'x' array is
@@ -12,6 +14,6 @@ void outputCVector(const char * fileName, fftw_complex * vec, double * x, int le
 
 /* Wrapper to outputCVector, which fftshifts the output.
  */
-void outputCVectorShift(const char * fileName, fftw_complex * vec, double * x, int len);
+void outputCVectorShift(const char * fileName, fftw_complex * vec, double * x, int len, Parameters p);
 
 #endif

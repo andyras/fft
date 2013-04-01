@@ -17,6 +17,7 @@ int main (int argc, char ** argv) {
  Parameters p;
  p.twoSided = false;
  p.backwardFT = false;
+ p.complex = false;
  p.forwardFT = true;
  p.verbose = false;
  p.outputExt = "FT";
@@ -25,7 +26,7 @@ int main (int argc, char ** argv) {
  bool verbose = false;
 
  /* process command line options */
- while ((c = getopt(argc, argv, "2bfho:v")) != -1) {
+ while ((c = getopt(argc, argv, "2bcfho:v")) != -1) {
   switch (c) {
    case '2':
     if (p.verbose) {
@@ -39,6 +40,12 @@ int main (int argc, char ** argv) {
     }
     p.backwardFT = true;
     p.forwardFT = false;
+    break;
+   case 'c':
+    if (p.verbose) {
+     std::cout << "Output complex FT.\n";
+    }
+    p.complex = true;
     break;
    case 'f':
     if (p.verbose) {

@@ -5,3 +5,7 @@
 # output to stdout
 
 # fix up makefile
+
+# add normalization flag
+
+# add complex flag
