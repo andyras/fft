@@ -88,6 +88,29 @@ int main (int argc, char ** argv) {
   }
  }
 
+ if (p.printHelp) {
+  std::cout << "\n"
+            << "fft: a utility for taking fast Fourier transforms of data.\n"
+            << "Usage: fft [-2] [-b] [-f] [-c] [-h] [-o] ext [-v] inputfile\n"
+	    << "\n"
+	    << "-2: Output 2-sided FT.\n"
+	    << "    Default is 1-sided (positive) values.\n"
+	    << "-b: Perform backward FT.\n"
+	    << "    Default is forward FT.\n"
+	    << "-f: Perform forward (time to energy) FT (default).\n"
+	    << "-c: Output complex (real and imaginary) amplitude.\n"
+	    << "    Real is first amplitude column in the output, imaginary is second.\n"
+	    << "-h: Print this help message.\n"
+	    << "-o: Specify a filename extension. The default is to append 'FT' to the\n"
+	    << "    filename, e.g. input.dat --> inputFT.dat.\n"
+	    << "-v: Print verbose information about what the program is doing.\n"
+	    << "\n"
+	    << "fft outputs a text file, the first column is the transformed coordinate\n"
+	    << "and the other column(s) is(are) the magnitude of the FT.\n"
+	    << "\n";
+  return 0;
+ }
+
  if (argc == optind) {
   std::cerr << "ERROR: At least one input file must be specified.\n";
  return 1;

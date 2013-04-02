@@ -8,4 +8,6 @@
 
 # add normalization flag
 
-# add complex flag
+# handle single vs. multi-column input
+
+# implement backward FT
