@@ -98,22 +98,26 @@ int main (int argc, char ** argv) {
             << "fft: a utility for taking fast Fourier transforms of data.\n"
             << "Usage: fft [-2] [-b] [-f] [-c] [-h] [-o] [-s] ext [-v] inputfile\n"
 	    << "\n"
-	    << "-2: Output 2-sided FT.\n"
-	    << "    Default is 1-sided (positive) values.\n"
-	    << "-b: Perform backward FT.\n"
-	    << "    Default is forward FT.\n"
+	    << "-2: Output 2-sided FT. Default is 1-sided (positive) values.\n"
+	    << "-b: [NOT IMPLEMENTED] Perform backward FT. Default is forward FT.\n"
 	    << "-f: Perform forward (time to energy) FT (default).\n"
 	    << "-c: Output complex (real and imaginary) amplitude.\n"
 	    << "    Real is first amplitude column in the output, imaginary is second.\n"
+	    << "    Default is to print the mod of the amplitude.\n"
 	    << "-h: Print this help message.\n"
 	    << "-o: Specify a filename extension. The default is to append 'FT' to the\n"
 	    << "    filename, e.g. input.dat --> inputFT.dat.\n"
-	    << "-s: No shifting of transformed output.\n"
-	    << "    Default is to shift.\n"
+	    << "-s: No shifting of transformed output. Default is to shift.\n"
 	    << "-v: Print verbose information about what the program is doing.\n"
 	    << "\n"
 	    << "fft outputs a text file, the first column is the transformed coordinate\n"
 	    << "and the other column(s) is(are) the magnitude of the FT.\n"
+	    << "\n"
+	    << "fft understands input with one, two or three columns (extra columns are\n"
+	    << "ignored).  One column is interpreted as a real amplitude and a spacing\n"
+	    << "of unity is assumed.  With two columns, the first is the coordinate\n"
+	    << "and the second is the real amplitude.  If there is a third column it is\n"
+	    << "read in as the imaginary portion of the amplitude.\n"
 	    << "\n";
   return 0;
  }
@@ -123,18 +127,16 @@ int main (int argc, char ** argv) {
  return 1;
  }
 
- /* get input file name */
+ // get input file name
  char * inputFile = NULL;
- /* code for getting multiple inputs
-  for (int ii = optind; ii < argc; ii++) {
+ // code for get multiple inputs
+ for (int ii = optind; ii < argc; ii++) {
+  inputFile = argv[ii];
+  if (p.verbose) {
+   std::cout << "The input file name is " << inputFile << ".\n";
+  }
+  writeFTOfFile(inputFile, p);
  }
- */
- inputFile = argv[optind];
- if (p.verbose) {
-  std::cout << "The input file name is " << inputFile << ".\n";
- }
-
- writeFTOfFile(inputFile, p);
 
  return 0;
 }

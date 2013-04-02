@@ -1,13 +1,8 @@
-# take multiple input filename arguments
-
-# accept complex input
-
-# output to stdout
+# option to output to stdout
+ # useful for chaining with other utilities
 
 # fix up makefile
 
 # add normalization flag
-
-# handle single vs. multi-column input
 
 # implement backward FT

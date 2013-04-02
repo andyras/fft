@@ -83,13 +83,13 @@ void writeFT(const char * fileName, double * invec, double * times, int n, Param
 int Number_of_values (const char * fileName) {
  FILE * inputFile;
  double value;
- int numberOfValues = 0;
+ int n = 0;
 
  inputFile = fopen(fileName, "r");
 
  if (inputFile != NULL) {
-  while (fscanf(inputFile, "%lf", &value) != EOF) { numberOfValues++; }
-  if (numberOfValues == 0 ) {
+  while (fscanf(inputFile, "%lf", &value) != EOF) { n++; }
+  if (n == 0 ) {
    fprintf(stderr, "WARNING: input file %s is empty.\n", fileName);
   }
  }
@@ -100,7 +100,7 @@ int Number_of_values (const char * fileName) {
  
  fclose(inputFile);
 
- return numberOfValues;
+ return n;
 }
 
 /* Counts the number of lines in a file. */
@@ -120,7 +120,8 @@ int countLines(const char * fileName) {
 /* reads in the values from file; returns an array the length of the number of 
  * numbers in the file
  */
-void readFTInput(double * times, fftw_complex * in, const char * fileName, int numberOfValues) {
+void readFTInput(double * times, fftw_complex * in, const char * fileName, int numberOfValues,
+                 Parameters p) {
  int n = 0;		// number of columns in input
  int ii = 0;		// counter
  bool firstLine = true;	// flag for first line
@@ -137,7 +138,9 @@ void readFTInput(double * times, fftw_complex * in, const char * fileName, int n
    while (is >> junk) {
     n++;
    }
-   std::cout << "Number of columns is " << n << "\n";
+   if (p.verbose) {
+    std::cout << "Number of input columns is " << n << "\n";
+   }
    firstLine = false;
   }
   else {
@@ -170,27 +173,7 @@ void readFTInput(double * times, fftw_complex * in, const char * fileName, int n
   ii++;
  }
 
-
- /*
- FILE * inputFile;
- int i = 0;
-
- inputFile = fopen(fileName,"r");
-
- if (inputFile != NULL) {
-  while (fscanf(inputFile, "%lf %lf %*s", &times[i], &in[i][0]) != EOF && i < numberOfValues) {
-#ifdef DEBUG_FFTMANIP
-   std::cout << "time " << times[i] << " input " << in[i][0] << "\n";
-#endif
-   i++;
-  }
- }
- else {
-  std::cerr << "ERROR [" << __FUNCTION__ << "]: file " << fileName << " does not exist.\n";
- }
-
- fclose(inputFile);
- */
+ return;
 }
 
 /* This function writes the FT of the input file to a file.
@@ -226,7 +209,7 @@ void writeFTOfFile(const char * inputFile, Parameters p) {
  fftw_fwd = fftw_plan_dft_1d(n, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
 
  // set up in and times arrays
- readFTInput(times, in, inputFile, n);
+ readFTInput(times, in, inputFile, n, p);
 
  // compute time spacing
  double dt = times[1] - times[0];

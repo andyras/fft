@@ -32,7 +32,8 @@ void writeFTOfFile(const char * fileName, Parameters p);
 /* reads in the values from file; returns an array the length of the number of 
  * numbers in the file
  */
-void readFTInput(double * times, fftw_complex * in, const char * nameOfFile, int numberOfValues);
+void readFTInput(double * times, fftw_complex * in, const char * nameOfFile, int numberOfValues,
+                 Parameters p);
 
 /* returns the number of numbers in a file.  This way, it doesn't matter if
  * they are one per line or multiple per line.
