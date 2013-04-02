@@ -9,15 +9,32 @@ void outputCVector(const char * fileName, fftw_complex * vec, double * x, int le
  FILE * output;
  output = fopen(fileName, "w");
 
+ // define offsets for counters; these defaults are for 2-sided transform
+ int xOffset = 0;	// offset of x counter relative to amplitude index
+ int first = 0;
+ int last = len;
+ // one-sided FT
+ if (!p.twoSided) {
+  // unshifted FT
+  if (p.noshift) {
+   xOffset = len/2;
+   last = len-(len/2);
+  }
+  // shifted FT
+  else {
+   first = len/2;
+  }
+ }
+
  // write to the output
  if (p.complex) {
-  for (int i = 0; i < len; i++) {
-   fprintf(output, "%-.7g %-.7g %-.7g\n", x[i], vec[i][0], vec[i][1]);
+  for (int ii = first; ii < last; ii++) {
+   fprintf(output, "%-.7g %-.7g %-.7g\n", x[ii+xOffset], vec[ii][0], vec[ii][1]);
   }
  }
  else {
-  for (int ii = 0; ii < len; ii++) {
-   fprintf(output, "%-.7g %-.7g\n", x[ii], (pow(vec[ii][0],2) + pow(vec[ii][1],2)));
+  for (int ii = first; ii < last; ii++) {
+   fprintf(output, "%-.7g %-.7g\n", x[ii+xOffset], (pow(vec[ii][0],2) + pow(vec[ii][1],2)));
   }
  }
 
