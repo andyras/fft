@@ -6,3 +6,9 @@
 # add normalization flag
 
 # implement backward FT
+
+# catch uneven spacing in input
+
+# add option to print version info, which FFT library used
+
+# autocorrelation command?
