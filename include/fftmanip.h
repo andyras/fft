@@ -6,6 +6,7 @@
 #include <string>
 #include <fftw3.h>
 #include <fstream>
+#include <sstream>
 
 #include "output.h"
 #include "fftmanip.h"

@@ -22,11 +22,10 @@ int main (int argc, char ** argv) {
  p.verbose = false;
  p.outputExt = "FT";
  p.printHelp = false;
-
- bool verbose = false;
+ p.noshift = false;
 
  /* process command line options */
- while ((c = getopt(argc, argv, "2bcfho:v")) != -1) {
+ while ((c = getopt(argc, argv, "2bcfho:sv")) != -1) {
   switch (c) {
    case '2':
     if (p.verbose) {
@@ -72,6 +71,12 @@ int main (int argc, char ** argv) {
      std::cout << "Specifying output filename pre-extension: " << p.outputExt << ".\n";
     }
     break;
+   case 's':
+    p.noshift = true;
+    if (p.verbose) {
+     std::cout << "Not shifting FT'd output.\n";
+    }
+    break;
    case '?':
     if (optopt == 'o') {
      fprintf(stderr, "Option -%c requires a filename argument.\n", optopt);
@@ -91,7 +96,7 @@ int main (int argc, char ** argv) {
  if (p.printHelp) {
   std::cout << "\n"
             << "fft: a utility for taking fast Fourier transforms of data.\n"
-            << "Usage: fft [-2] [-b] [-f] [-c] [-h] [-o] ext [-v] inputfile\n"
+            << "Usage: fft [-2] [-b] [-f] [-c] [-h] [-o] [-s] ext [-v] inputfile\n"
 	    << "\n"
 	    << "-2: Output 2-sided FT.\n"
 	    << "    Default is 1-sided (positive) values.\n"
@@ -103,6 +108,8 @@ int main (int argc, char ** argv) {
 	    << "-h: Print this help message.\n"
 	    << "-o: Specify a filename extension. The default is to append 'FT' to the\n"
 	    << "    filename, e.g. input.dat --> inputFT.dat.\n"
+	    << "-s: No shifting of transformed output.\n"
+	    << "    Default is to shift.\n"
 	    << "-v: Print verbose information about what the program is doing.\n"
 	    << "\n"
 	    << "fft outputs a text file, the first column is the transformed coordinate\n"
@@ -123,7 +130,7 @@ int main (int argc, char ** argv) {
  }
  */
  inputFile = argv[optind];
- if (verbose) {
+ if (p.verbose) {
   std::cout << "The input file name is " << inputFile << ".\n";
  }
 

@@ -9,6 +9,7 @@ struct Parameters {
  bool verbose;
  std::string outputExt;
  bool printHelp;
+ bool noshift;
 };
 
 #endif

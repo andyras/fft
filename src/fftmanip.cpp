@@ -80,21 +80,21 @@ void writeFT(const char * fileName, double * invec, double * times, int n, Param
 /* returns the number of numbers in a file.  This way, it doesn't matter if
  * they are one per line or multiple per line.
  */
-int Number_of_values (const char * nameOfFile) {
+int Number_of_values (const char * fileName) {
  FILE * inputFile;
  double value;
  int numberOfValues = 0;
 
- inputFile = fopen(nameOfFile, "r");
+ inputFile = fopen(fileName, "r");
 
  if (inputFile != NULL) {
   while (fscanf(inputFile, "%lf", &value) != EOF) { numberOfValues++; }
   if (numberOfValues == 0 ) {
-   fprintf(stderr, "WARNING: input file %s is empty.\n", nameOfFile);
+   fprintf(stderr, "WARNING: input file %s is empty.\n", fileName);
   }
  }
  else {
-  std::cerr << "WARNING [" << __FUNCTION__ << "]: " << nameOfFile << " does not exist.\n";
+  std::cerr << "WARNING [" << __FUNCTION__ << "]: " << fileName << " does not exist.\n";
   return -1;
  }
  
@@ -120,11 +120,62 @@ int countLines(const char * fileName) {
 /* reads in the values from file; returns an array the length of the number of 
  * numbers in the file
  */
-void readFTInput(double * times, fftw_complex * in, const char * nameOfFile, int numberOfValues) {
+void readFTInput(double * times, fftw_complex * in, const char * fileName, int numberOfValues) {
+ int n = 0;		// number of columns in input
+ int ii = 0;		// counter
+ bool firstLine = true;	// flag for first line
+ std::string line;	// each line of input
+
+ /* open input stream */
+ std::ifstream inputFile(fileName);
+
+ while (std::getline(inputFile, line)) {
+  std::stringstream is(line);
+  /* count columns from first line */
+  if (firstLine) {
+   std::string junk;
+   while (is >> junk) {
+    n++;
+   }
+   std::cout << "Number of columns is " << n << "\n";
+   firstLine = false;
+  }
+  else {
+  }
+
+  /* read in data */
+  is << line;
+  if (n == 0) {
+   std::cerr << "ERROR reading file: no columns of input.\n";
+   return;
+  }
+  // column 1 is amplitudes, assume integer time spacing
+  else if (n == 1) {
+   is >> in[ii][0];
+   in[ii][1] = 0.0;
+   times[ii] = ii;
+  }
+  // column 1 is time data, column 2 is amplitudes
+  else if (n == 2) {
+   is >> times[ii];
+   is >> in[ii][0];
+   in[ii][1] = 0.0;
+  }
+  // column 1 is time, col 2 is Re(amplitude), col 3 is Im(amplitude), ignore rest
+  else {
+   is >> times[ii];
+   is >> in[ii][0];
+   is >> in[ii][1];
+  }
+  ii++;
+ }
+
+
+ /*
  FILE * inputFile;
  int i = 0;
 
- inputFile = fopen(nameOfFile,"r");
+ inputFile = fopen(fileName,"r");
 
  if (inputFile != NULL) {
   while (fscanf(inputFile, "%lf %lf %*s", &times[i], &in[i][0]) != EOF && i < numberOfValues) {
@@ -135,10 +186,11 @@ void readFTInput(double * times, fftw_complex * in, const char * nameOfFile, int
   }
  }
  else {
-  std::cerr << "ERROR [" << __FUNCTION__ << "]: file " << nameOfFile << " does not exist.\n";
+  std::cerr << "ERROR [" << __FUNCTION__ << "]: file " << fileName << " does not exist.\n";
  }
 
  fclose(inputFile);
+ */
 }
 
 /* This function writes the FT of the input file to a file.
@@ -179,7 +231,8 @@ void writeFTOfFile(const char * inputFile, Parameters p) {
  // compute time spacing
  double dt = times[1] - times[0];
  // compute energy spacing
- double dE = 2.0*M_PI/(dt*n);
+ // I think it is right to have (n-1) instead of n...
+ double dE = 2.0*M_PI/(dt*(n-1));
  // build energies array
  double * energies = new double [n];
  for (int i = 0; i < n; i++) {
@@ -190,7 +243,12 @@ void writeFTOfFile(const char * inputFile, Parameters p) {
  fftw_execute(fftw_fwd);
 
  // print the result
- outputCVectorShift(outputFile.c_str(), out, energies, n, p);
+ if (p.noshift) {
+  outputCVector(outputFile.c_str(), out, energies, n, p);
+ }
+ else {
+  outputCVectorShift(outputFile.c_str(), out, energies, n, p);
+ }
 
  // clean up
  delete [] energies;
