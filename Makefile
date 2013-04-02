@@ -18,7 +18,6 @@ BIN = fft
 ### objects needed to compile $(BIN)
 OBJ = $(OBJDIR)/fft.o $(OBJDIR)/output.o $(OBJDIR)/fftmanip.o
 ### directories with headers
-INCDIR = -I./include
 INCDIR = -I./include -I$(MKLROOT)/include/fftw
 
 # main executable: this is made by default so should go on top
