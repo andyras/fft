@@ -96,7 +96,7 @@ int main (int argc, char ** argv) {
  if (p.printHelp) {
   std::cout << "\n"
             << "fft: a utility for taking fast Fourier transforms of data.\n"
-            << "Usage: fft [-2] [-b] [-f] [-c] [-h] [-o] [-s] ext [-v] inputfile\n"
+            << "Usage: fft [-2] [-b] [-f] [-c] [-h] [-o] ext [-s] [-v] inputfile\n"
 	    << "\n"
 	    << "-2: Output 2-sided FT. Default is 1-sided (positive) values.\n"
 	    << "-b: [NOT IMPLEMENTED] Perform backward FT. Default is forward FT.\n"
